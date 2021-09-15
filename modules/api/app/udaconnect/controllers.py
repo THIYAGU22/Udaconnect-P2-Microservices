@@ -1,16 +1,17 @@
 from datetime import datetime
+from typing import Optional, List
 
-from app.udaconnect.models import Connection, Location, Person
+from flask import request
+from flask_accepts import accepts, responds
+from flask_restx import Namespace, Resource
+
+from app.udaconnect.models import Location, Person
 from app.udaconnect.schemas import (
     ConnectionSchema,
     LocationSchema,
     PersonSchema,
 )
 from app.udaconnect.services import ConnectionService, LocationService, PersonService
-from flask import request
-from flask_accepts import accepts, responds
-from flask_restx import Namespace, Resource
-from typing import Optional, List
 
 DATE_FORMAT = "%Y-%m-%d"
 
