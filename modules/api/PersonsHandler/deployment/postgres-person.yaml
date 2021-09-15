@@ -37,7 +37,7 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: postgres
+    app: postgres-person
   ports:
    - port: 5432
 ---
@@ -56,8 +56,8 @@ spec:
         app: postgres-person
     spec:
       containers:
-        - name: postgres
-          image: postgis/postgis:12-2.5-alpine
+        - name: postgres-person-container
+          image: postgres:latest
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 5432
@@ -78,9 +78,9 @@ spec:
                 name: db-person-env
                 key: DB_NAME
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: postgres-person-db
+            - mountPath: /var/lib/geopersons/data
+              name: geopersons
       volumes:
-        - name: postgres-person-db
+        - name: geopersons
           persistentVolumeClaim:
             claimName: postgres-person-pv-claim
