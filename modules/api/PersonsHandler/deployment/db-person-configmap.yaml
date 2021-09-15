@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  DB_USERNAME: "ct_person"
+  DB_NAME: "geopersons"
+  DB_HOST: "postgres-person-service"
+  DB_PORT: "5432"
+metadata:
+  name: db-person-env
