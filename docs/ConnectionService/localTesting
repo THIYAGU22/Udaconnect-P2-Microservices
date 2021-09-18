@@ -1,0 +1,14 @@
+flask run --host=0.0.0.0 --port=5050   <--- Connections service
+flask run --host=0.0.0.0 --port=5000   <--- Person Service  [in k3s udaconnect-person-api svc]
+
+Hit the persons service api from connections service
+
+------------  local psql testing ------------------
+create database geolocations;
+create user ct_location with encrypted password 'wowimsosecure';
+grant all privileges on database geolocations to ct_location;
+ALTER USER ct_location WITH SUPERUSER;
+psql -U ct_location -d geolocations -h localhost -p 5432
+grant all on schema postgis to ct_location;
+
+---------------------------------------------------

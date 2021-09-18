@@ -1,0 +1,37 @@
+
+curl http://localhost:30002/api/persons/5/connection?distance=5&end_date=2020-12-30&start_date=2020-01-01
+
+
+response
+[
+  {
+    "location": {
+      "person_id": 6,
+      "longitude": "37.55363",
+      "id": 34,
+      "latitude": "-122.290883",
+      "creation_time": "2020-07-07T10:37:06"
+    },
+    "person": {
+      "id": 6,
+      "first_name": "Frank",
+      "company_name": "USDA",
+      "last_name": "Shader"
+    }
+  },
+  {
+    "location": {
+      "person_id": 1,
+      "longitude": "37.55363",
+      "id": 36,
+      "latitude": "-122.290883",
+      "creation_time": "2020-07-07T10:37:06"
+    },
+    "person": {
+      "id": 1,
+      "first_name": "Pam",
+      "company_name": "Hampton, Hampton and McQuill",
+      "last_name": "Trexler"
+    }
+  }
+]

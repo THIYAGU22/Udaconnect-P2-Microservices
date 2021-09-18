@@ -1,0 +1,86 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: postgres-volume-geolocations
+  labels:
+    type: local
+    app: postgres-connection-location
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 256Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data/postgres-geolocations-db"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgres-geolocation-pv-claim
+  labels:
+    app: postgres-connection-location
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-connection-location
+  labels:
+    app: postgres-connection-location
+spec:
+  type: NodePort
+  selector:
+    app: postgres-connection-location
+  ports:
+   - port: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-connection-location
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-connection-location
+  template:
+    metadata:
+      labels:
+        app: postgres-connection-location
+    spec:
+      containers:
+        - name: postgres-connection-location-container
+          image: postgis/postgis:12-2.5-alpine
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+          - name: POSTGRES_USER
+            valueFrom:
+              configMapKeyRef:
+                name: db-geolocations-creds
+                key: DB_USERNAME
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: DB_PASSWORD
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: db-geolocations-creds
+                key: DB_NAME
+          volumeMounts:
+            - mountPath: /var/lib/geolocations/data
+              name: postgres-geolocations-db
+      volumes:
+        - name: postgres-geolocations-db
+          persistentVolumeClaim:
+            claimName: postgres-geolocation-pv-claim
