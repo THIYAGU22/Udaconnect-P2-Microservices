@@ -1,0 +1,17 @@
+Refactoring the monolith to microservice architecture:
+
+1. Built the Dependency Graph and analysed the dependencies and dependents
+    PersonsService < ConnnectionsService < Location(Persons + Connections)
+2. Followed Strangler pattern
+    * Refactored the Persons endpoint as a separate service with its respective db keeping track of persons
+      firstname,lastname,companyname [deployed with nodeport:30001]
+    * Refactored the connections endpoint as a separate service with its respective db. [deployed with nodeport:30002]
+      while validating the persons, fire the query against the Persons Service endpoint
+      instead of querying the person db -- caching will be consistently maintained
+    * The above endpoints are followed with RESTful service they make communication with service
+    * Transform the frontend query endpoints pointing to services nodeport -- customised as docker image and
+      configured frontend endpoint to nodeport:30000
+    * KAFKA Cluster setup done through bitnami kafka helm charts -- setup done with shell script [KafkaSetup-Helm/SetupKafkaClusters-Topic.sh]
+    * LocationProducer is introduced with grpc protocol binding the ports with 30003 and producing a message with locations_pb2
+    * LocationConsumer is configured with consumer url and topic name so as it will be consuming the message and redirecting to connectionsDB
+

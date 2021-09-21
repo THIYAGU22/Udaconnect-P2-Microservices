@@ -1,0 +1,16 @@
+GRPC is compared to be more faster mode of communication than REST Protocol
+* Experienced 7 times faster than REST while receiving and 10 times faster than REST while sending
+* Also it validates the users payload and gurantees the type of data is exepected or not
+
+In this proto the request is expected to recieve in int32 format for pid,latitude,longitude fields
+This message is validated and will be produced to a kafka topic
+
+message LocationMessage {
+  int32 pid = 1;
+  int32 latitude = 94;
+  int32 longitude = 98;
+}
+
+service LocationService {
+  rpc Create(LocationMessage) returns (LocationMessage);
+}
