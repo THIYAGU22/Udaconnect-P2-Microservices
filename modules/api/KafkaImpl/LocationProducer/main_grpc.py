@@ -35,5 +35,6 @@ locations_pb2_grpc.add_LocationServiceServicer_to_server(LocationEventServicer()
 
 print("Server starting on port 30003...")
 server.add_insecure_port("[::]:30003")
+server.add_insecure_port("[::]:5005")
 server.start()
 server.wait_for_termination()
